@@ -69,6 +69,12 @@ public class BookModel {
     @Field(name = "keywords")
     private List<String> bookKeywords;
 
+    @Field(name = "popularity")
+    private Double bookPopularity;
+
+    @Field(name = "reviews")
+    private Double bookReviews;
+
     @Field(name="created_at")
     private LocalDateTime createdAt;
 
