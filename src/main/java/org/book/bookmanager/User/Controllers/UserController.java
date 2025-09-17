@@ -1,6 +1,7 @@
 package org.book.bookmanager.User.Controllers;
 
 import jakarta.validation.Valid;
+import org.book.bookmanager.User.DTOs.AuthenticationDTO;
 import org.book.bookmanager.User.DTOs.RegisterDTO;
 import org.book.bookmanager.User.Model.UserModel;
 import org.book.bookmanager.User.Services.TokenService;
@@ -45,6 +46,19 @@ public class UserController {
         var auth = authenticationManager.authenticate(usernamePassword);
         var token = tokenService.generateToken((UserModel) auth.getPrincipal());
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody @Valid AuthenticationDTO authenticationDTO){
+        if (!userService.existsUser(authenticationDTO.email())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationDTO.email(), authenticationDTO.password());
+            var auth = authenticationManager.authenticate(usernamePassword);
+            var token = tokenService.generateToken((UserModel) auth.getPrincipal());
+            return ResponseEntity.status(HttpStatus.OK).body(token);
+        }catch (Exception exception){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
+        }
     }
 
 }
