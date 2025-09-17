@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
-                    authorize.requestMatchers(HttpMethod.POST, "/book").hasRole("LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.POST, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
