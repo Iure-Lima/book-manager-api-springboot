@@ -15,15 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "auth-controller")
-
+@Tag(name = "Auth")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
     @Autowired
     TokenService tokenService;
@@ -44,6 +43,7 @@ public class UserController {
         UserModel newUser = new UserModel();
         BeanUtils.copyProperties(registerDTO, newUser);
         newUser.setPassword(encryptedPassword);
+        newUser.setMongoId(UUID.randomUUID().toString());
 
         userService.saveUser(newUser);
 

@@ -1,6 +1,7 @@
 package org.book.bookmanager.Book.Controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.book.bookmanager.Book.DTOs.BookDTORequestCreated;
@@ -14,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/book")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name="book-controller")
+@Tag(name="Book")
 public class BookController {
     @Autowired
     BookService bookService;
 
-    @PostMapping
-    @Operation(summary = "Adding books from the database", method = "POST")
-    public ResponseEntity<BookModel> addProduct(@Valid @RequestBody BookDTORequestCreated bookDTORequestCreated){
+    @Operation(summary = "Adding books from the database", method = "POST",security = { @SecurityRequirement(name = "bearerAuth") })
+    @PostMapping("")
+    public ResponseEntity<BookModel> addProduct(@RequestBody @Valid BookDTORequestCreated bookDTORequestCreated){
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.saveBook(bookDTORequestCreated));
     }
 }

@@ -21,11 +21,11 @@ public interface BookRepository extends MongoRepository<BookModel, String> {
     Page<BookModel> findAll(Pageable pageable);
 
     Page<BookModel> findByBookTitleContainingIgnoreCase(String title, Pageable pageable);
-    Page<BookModel> findByBookAuthorsContainingIgnoreCase(String bookAuthors, Pageable pageable);
+    Page<BookModel> findByBookAuthorContainingIgnoreCase(String bookAuthors, Pageable pageable);
 
     Page<BookModel> findByBookCategoriesIn(Collection<List<BookCategory>> bookCategories, Pageable pageable);
     Page<BookModel> findByBookKeywordsIn(Collection<List<String>> bookKeywords, Pageable pageable);
-    Page<BookModel> findByBookAuthorsIn(List<String> authors, Pageable pageable);
+    Page<BookModel> findByBookAuthorIn(Collection<String> bookAuthor, Pageable pageable);
 
     Page<BookModel> findByBookYear(Integer bookYear, Pageable pageable);
     Page<BookModel> findByBookLanguage(String bookLanguage, Pageable pageable);
