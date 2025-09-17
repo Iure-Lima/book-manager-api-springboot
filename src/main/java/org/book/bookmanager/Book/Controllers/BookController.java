@@ -27,10 +27,18 @@ public class BookController {
     }
     @Operation(summary = "Remove book from the database", method = "DELETE",security = { @SecurityRequirement(name = "bearerAuth") })
     @DeleteMapping("/{id}")
-    private ResponseEntity<String> deleteProduct(@PathVariable(value = "id") String id){
+    public ResponseEntity<String> deleteProduct(@PathVariable(value = "id") String id){
         BookModel book = this.bookService.getBookById(id);
         if (book == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
         this.bookService.removeBook(book);
         return ResponseEntity.status(HttpStatus.OK).body("Book deleted");
+    }
+
+    @Operation(summary = "Get book by id", method = "GET")
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getBookById(@PathVariable(value = "id") String id){
+        BookModel book = this.bookService.getBookById(id);
+        if (book == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+        return ResponseEntity.status(HttpStatus.OK).body(book);
     }
 }
