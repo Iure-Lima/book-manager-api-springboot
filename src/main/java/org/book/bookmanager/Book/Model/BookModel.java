@@ -31,7 +31,7 @@ public class BookModel {
     private String bookSubtitle;
 
     @Field(name = "authors")
-    private List<String> bookAuthors;
+    private String bookAuthors;
 
     @Field(name= "publisher")
     private String bookPublisher;
