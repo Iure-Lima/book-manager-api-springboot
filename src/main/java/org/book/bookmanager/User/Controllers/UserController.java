@@ -1,5 +1,7 @@
 package org.book.bookmanager.User.Controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.book.bookmanager.User.DTOs.AuthenticationDTO;
 import org.book.bookmanager.User.DTOs.RegisterDTO;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "auth-controller")
+
 public class UserController {
     @Autowired
     TokenService tokenService;
@@ -30,6 +34,7 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Operation(summary = "Allows user registration", method = "POST")
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody @Valid RegisterDTO registerDTO){
         if (userService.existsUser(registerDTO.email())) return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -48,6 +53,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 
+    @Operation(summary = "Allows user login", method = "POST")
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid AuthenticationDTO authenticationDTO){
         if (!userService.existsUser(authenticationDTO.email())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
