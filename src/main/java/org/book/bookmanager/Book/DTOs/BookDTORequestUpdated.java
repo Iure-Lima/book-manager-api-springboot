@@ -1,7 +1,5 @@
 package org.book.bookmanager.Book.DTOs;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.book.bookmanager.Book.Enum.BookCategory;
 import org.book.bookmanager.Book.Enum.BookStatus;
 
