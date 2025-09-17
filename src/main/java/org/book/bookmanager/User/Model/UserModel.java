@@ -2,6 +2,7 @@ package org.book.bookmanager.User.Model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.book.bookmanager.User.Enum.UserRole;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -19,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserModel implements UserDetails {
     @MongoId
     private String mongoId;

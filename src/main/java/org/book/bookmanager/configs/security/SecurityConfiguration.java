@@ -28,8 +28,8 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers(HttpMethod.POST, "/auth/register").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
-                    authorize.requestMatchers(HttpMethod.POST, "./auth/register").permitAll();
                     authorize.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
