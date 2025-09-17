@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.book.bookmanager.Book.Enum.BookCategory;
 import org.book.bookmanager.Book.Enum.BookStatus;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -25,13 +26,15 @@ public class BookModel {
     private String bookId;
 
     @Field(name="title")
+    @Indexed
     private String bookTitle;
 
     @Field(name = "subtitles")
     private String bookSubtitle;
 
-    @Field(name = "authors")
-    private String bookAuthors;
+    @Field(name = "author")
+    @Indexed
+    private String bookAuthor;
 
     @Field(name= "publisher")
     private String bookPublisher;
@@ -43,6 +46,7 @@ public class BookModel {
     private Integer bookEdition;
 
     @Field(name= "ISBN")
+    @Indexed(unique = true)
     private String bookISBN;
 
     @Field(name="language")
@@ -67,6 +71,7 @@ public class BookModel {
     private BookStatus bookStatus;
 
     @Field(name = "keywords")
+    @Indexed
     private List<String> bookKeywords;
 
     @Field(name = "popularity")
