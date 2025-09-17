@@ -30,12 +30,11 @@ public class BookService {
         return newBook;
     }
 
-    public String removeBook(String id){
-        try{
-            bookRepository.deleteById(id);
-            return "Delete the book";
-        }catch (Exception exception){
-            return "Error for delete nook";
-        }
+    public void removeBook(BookModel book){
+        this.bookRepository.delete(book);
+    }
+
+    public BookModel getBookById(String id){
+        return this.bookRepository.findByBookId(id);
     }
 }

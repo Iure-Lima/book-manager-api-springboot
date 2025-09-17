@@ -25,4 +25,12 @@ public class BookController {
     public ResponseEntity<BookModel> addProduct(@RequestBody @Valid BookDTORequestCreated bookDTORequestCreated){
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.saveBook(bookDTORequestCreated));
     }
+    @Operation(summary = "Remove book from the database", method = "DELETE",security = { @SecurityRequirement(name = "bearerAuth") })
+    @DeleteMapping("/{id}")
+    private ResponseEntity<String> deleteProduct(@PathVariable(value = "id") String id){
+        BookModel book = this.bookService.getBookById(id);
+        if (book == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+        this.bookService.removeBook(book);
+        return ResponseEntity.status(HttpStatus.OK).body("Book deleted");
+    }
 }
