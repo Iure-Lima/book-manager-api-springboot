@@ -38,7 +38,7 @@ public class TokenService {
         }
     }
 
-    public boolean ValidationToken(String token){
+    public boolean validationToken(String token){
         try{
             Algorithm algorithm = Algorithm.HMAC256(this.secretToken);
             JWT.require(algorithm).build().verify(token);
