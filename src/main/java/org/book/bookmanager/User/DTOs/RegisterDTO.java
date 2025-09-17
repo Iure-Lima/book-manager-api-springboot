@@ -8,5 +8,5 @@ public record RegisterDTO(
         @NotNull @NotNull String email,
         @NotNull @NotBlank String password,
         @NotNull @NotBlank String username,
-        @NotNull UserRole userRole
+        @NotNull UserRole role
         ) {}
