@@ -29,4 +29,13 @@ public class BookService {
         bookRepository.save(newBook);
         return newBook;
     }
+
+    public String removeBook(String id){
+        try{
+            bookRepository.deleteById(id);
+            return "Delete the book";
+        }catch (Exception exception){
+            return "Error for delete nook";
+        }
+    }
 }

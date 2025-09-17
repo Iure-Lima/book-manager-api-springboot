@@ -21,7 +21,7 @@ public class BookController {
     BookService bookService;
 
     @Operation(summary = "Adding books from the database", method = "POST",security = { @SecurityRequirement(name = "bearerAuth") })
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<BookModel> addProduct(@RequestBody @Valid BookDTORequestCreated bookDTORequestCreated){
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.saveBook(bookDTORequestCreated));
     }
