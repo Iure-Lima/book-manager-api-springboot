@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -48,6 +49,7 @@ public class BookService {
             String language,
             BookStatus status,
             String publisher,
+            List<String> categories,
             Pageable page
     ){
         if (title !=null) {
@@ -67,6 +69,8 @@ public class BookService {
         if (status != null) return this.bookRepository.findByBookStatus(status, page);
 
         if (publisher != null) return this.bookRepository.findByBookPublisher(publisher, page);
+
+        if (categories != null) return this.bookRepository.findByBookCategoriesIn(categories, page);
 
         return this.bookRepository.findAll(page);
     }

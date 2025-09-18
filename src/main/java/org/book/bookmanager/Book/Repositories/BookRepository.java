@@ -1,6 +1,5 @@
 package org.book.bookmanager.Book.Repositories;
 
-import org.book.bookmanager.Book.Enum.BookCategory;
 import org.book.bookmanager.Book.Enum.BookStatus;
 import org.book.bookmanager.Book.Model.BookModel;
 import org.springframework.data.domain.Page;
@@ -23,7 +22,7 @@ public interface BookRepository extends MongoRepository<BookModel, String> {
     Page<BookModel> findByBookTitleContainingIgnoreCase(String title, Pageable pageable);
     Page<BookModel> findByBookAuthorContainingIgnoreCase(String bookAuthors, Pageable pageable);
 
-    Page<BookModel> findByBookCategoriesIn(Collection<List<BookCategory>> bookCategories, Pageable pageable);
+    Page<BookModel> findByBookCategoriesIn(List<String> bookCategories, Pageable pageable);
     Page<BookModel> findByBookKeywordsIn(Collection<List<String>> bookKeywords, Pageable pageable);
 
     Page<BookModel> findByBookYear(Integer bookYear, Pageable pageable);
