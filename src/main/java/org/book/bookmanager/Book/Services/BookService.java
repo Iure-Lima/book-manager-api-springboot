@@ -50,6 +50,7 @@ public class BookService {
             BookStatus status,
             String publisher,
             List<String> categories,
+            List<String> keywords,
             Pageable page
     ){
         if (title !=null) {
@@ -71,6 +72,8 @@ public class BookService {
         if (publisher != null) return this.bookRepository.findByBookPublisher(publisher, page);
 
         if (categories != null) return this.bookRepository.findByBookCategoriesIn(categories, page);
+
+        if (keywords != null) return this.bookRepository.findByBookKeywordsIn(keywords, page);
 
         return this.bookRepository.findAll(page);
     }

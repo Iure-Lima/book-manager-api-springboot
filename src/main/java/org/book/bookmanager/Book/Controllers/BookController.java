@@ -67,7 +67,8 @@ public class BookController {
             @RequestParam(required = false) String language,
             @RequestParam(required = false) BookStatus status,
             @RequestParam(required = false) String publisher,
-            @RequestParam(required = false) List<String> categories
+            @RequestParam(required = false) List<String> categories,
+            @RequestParam(required = false) List<String> keywords
 
             ){
         if (!BookSort.isValid(sortBy.getBookSort())){
@@ -75,7 +76,7 @@ public class BookController {
         }
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy.getBookSort()));
         return ResponseEntity.status(HttpStatus.OK).body(this.bookService.search(
-                title, isbn, author, year, language,status, publisher,categories,pageable));
+                title, isbn, author, year, language,status, publisher,categories,keywords,pageable));
 
     }
 }
