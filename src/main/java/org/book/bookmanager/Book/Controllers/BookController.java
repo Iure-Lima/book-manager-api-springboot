@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.book.bookmanager.Book.DTOs.BookDTORequestCreated;
 import org.book.bookmanager.Book.Enum.BookSort;
+import org.book.bookmanager.Book.Enum.BookStatus;
 import org.book.bookmanager.Book.Model.BookModel;
 import org.book.bookmanager.Book.Services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,15 +64,16 @@ public class BookController {
             @RequestParam(required = false) String isbn,
             @RequestParam(required = false) String author,
             @RequestParam(required = false) Integer year,
-            @RequestParam(required = false) String language
+            @RequestParam(required = false) String language,
+            @RequestParam(required = false)BookStatus status
 
-    ){
+            ){
         if (!BookSort.isValid(sortBy.getBookSort())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid sort parameter");
         }
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy.getBookSort()));
         return ResponseEntity.status(HttpStatus.OK).body(this.bookService.search(
-                title, isbn, author, year, language,pageable));
+                title, isbn, author, year, language,status,pageable));
 
     }
 }

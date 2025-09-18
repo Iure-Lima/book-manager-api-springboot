@@ -1,6 +1,7 @@
 package org.book.bookmanager.Book.Services;
 
 import org.book.bookmanager.Book.DTOs.BookDTORequestCreated;
+import org.book.bookmanager.Book.Enum.BookStatus;
 import org.book.bookmanager.Book.Model.BookModel;
 import org.book.bookmanager.Book.Repositories.BookRepository;
 import org.springframework.beans.BeanUtils;
@@ -45,6 +46,7 @@ public class BookService {
             String author,
             Integer year,
             String language,
+            BookStatus status,
             Pageable page
     ){
         if (title !=null) {
@@ -61,6 +63,7 @@ public class BookService {
 
         if (language != null) return this.bookRepository.findByBookLanguage(language, page);
 
+        if (status != null) return this.bookRepository.findByBookStatus(status, page);
         return this.bookRepository.findAll(page);
     }
 }
