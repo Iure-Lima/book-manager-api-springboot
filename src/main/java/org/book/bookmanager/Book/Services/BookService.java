@@ -43,6 +43,7 @@ public class BookService {
             String title,
             String ISBN,
             String author,
+            Integer year,
             Pageable page
     ){
         if (title !=null) {
@@ -54,6 +55,8 @@ public class BookService {
         if (ISBN != null) return  this.bookRepository.findByBookISBN(ISBN, page);
 
         if (author != null) return this.bookRepository.findByBookAuthorContainingIgnoreCase(author,page);
+
+        if (year != null) return this.bookRepository.findByBookYear(year, page);
 
         return null;
     }
