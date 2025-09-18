@@ -47,6 +47,7 @@ public class BookService {
             Integer year,
             String language,
             BookStatus status,
+            String publisher,
             Pageable page
     ){
         if (title !=null) {
@@ -64,6 +65,9 @@ public class BookService {
         if (language != null) return this.bookRepository.findByBookLanguage(language, page);
 
         if (status != null) return this.bookRepository.findByBookStatus(status, page);
+
+        if (publisher != null) return this.bookRepository.findByBookPublisher(publisher, page);
+
         return this.bookRepository.findAll(page);
     }
 }
