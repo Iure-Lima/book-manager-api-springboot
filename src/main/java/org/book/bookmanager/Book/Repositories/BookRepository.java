@@ -15,8 +15,8 @@ import java.util.List;
 @Repository
 public interface BookRepository extends MongoRepository<BookModel, String> {
     BookModel findByBookId(String bookId);
-    BookModel findByBookTitle(String bookTitle);
-    BookModel findByBookISBN(String bookISBN);
+    Page<BookModel> findByBookTitle(String bookTitle, Pageable page);
+    Page<BookModel> findByBookISBN(String bookISBN, Pageable page);
 
     Page<BookModel> findAll(Pageable pageable);
 
