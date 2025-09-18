@@ -71,9 +71,9 @@ public class BookService {
 
         if (publisher != null) return this.bookRepository.findByBookPublisher(publisher, page);
 
-        if (categories != null) return this.bookRepository.findByBookCategoriesIn(categories, page);
+        if (categories != null && !categories.isEmpty()) return this.bookRepository.findByBookCategoriesIn(categories, page);
 
-        if (keywords != null) return this.bookRepository.findByBookKeywordsIn(keywords, page);
+        if (keywords != null && !keywords.isEmpty()) return this.bookRepository.findByBookKeywordsIn(keywords, page);
 
         return this.bookRepository.findAll(page);
     }
