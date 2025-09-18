@@ -41,6 +41,7 @@ public class BookService {
 
     public Page<BookModel> search(
             String title,
+            String ISBN,
             Pageable page
     ){
         if (title !=null) {
@@ -48,6 +49,8 @@ public class BookService {
             if (!book.getContent().isEmpty()) return book;
             else return this.bookRepository.findByBookTitleContainingIgnoreCase(title, page);
         }
+
+        if (ISBN != null) return  this.bookRepository.findByBookISBN(ISBN, page);;
 
         return null;
     }

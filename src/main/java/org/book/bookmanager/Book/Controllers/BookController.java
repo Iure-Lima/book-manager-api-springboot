@@ -59,14 +59,15 @@ public class BookController {
             @RequestParam(defaultValue = "ASC") Sort.Direction direction,
 
             //Search filters
-            @RequestParam(required = false) String title
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String isbn
 
     ){
         if (!BookSort.isValid(sortBy.getBookSort())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid sort parameter");
         }
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy.getBookSort()));
-        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.search(title,pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.search(title, isbn,pageable));
 
     }
 }
