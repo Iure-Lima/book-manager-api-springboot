@@ -51,7 +51,7 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body(book);
     }
 
-    @Operation(summary = "Route to research books", method = "GET")
+    @Operation(summary = "Search books", method = "GET")
     @GetMapping("/search")
     public ResponseEntity<Object> search(
             @RequestParam(defaultValue = "0") int page,
