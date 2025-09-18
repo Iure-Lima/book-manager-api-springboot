@@ -58,6 +58,6 @@ public class BookService {
 
         if (year != null) return this.bookRepository.findByBookYear(year, page);
 
-        return null;
+        return this.bookRepository.findAll(page);
     }
 }
