@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.book.bookmanager.Book.DTOs.BookDTORequestCreated;
+import org.book.bookmanager.Book.DTOs.BookDTORequestUpdated;
 import org.book.bookmanager.Book.Enum.BookSort;
 import org.book.bookmanager.Book.Enum.BookStatus;
 import org.book.bookmanager.Book.Model.BookModel;
@@ -49,6 +50,20 @@ public class BookController {
         BookModel book = this.bookService.getBookById(id);
         if (book == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
         return ResponseEntity.status(HttpStatus.OK).body(book);
+    }
+
+    @Operation(summary = "Partially update book information's", method = "PATCH")
+    @PatchMapping("/{id}")
+    public ResponseEntity<Object> patchBook(
+            @PathVariable(value = "id") String id,
+            @RequestBody BookDTORequestUpdated bookDto) {
+
+        BookModel bookForUpdate = this.bookService.getBookById(id);
+        if (bookForUpdate == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.updateBook(bookDto, id));
     }
 
     @Operation(summary = "Search books", method = "GET")

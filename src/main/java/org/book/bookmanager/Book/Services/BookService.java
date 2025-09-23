@@ -1,6 +1,7 @@
 package org.book.bookmanager.Book.Services;
 
 import org.book.bookmanager.Book.DTOs.BookDTORequestCreated;
+import org.book.bookmanager.Book.DTOs.BookDTORequestUpdated;
 import org.book.bookmanager.Book.Enum.BookStatus;
 import org.book.bookmanager.Book.Model.BookModel;
 import org.book.bookmanager.Book.Repositories.BookRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -77,4 +79,31 @@ public class BookService {
 
         return this.bookRepository.findAll(page);
     }
+
+    public BookModel updateBook(BookDTORequestUpdated dto, String id){
+        BookModel newBook = bookRepository.findByBookId(id);
+
+        Optional.ofNullable(dto.bookTitle()).ifPresent(newBook::setBookTitle);
+        Optional.ofNullable(dto.bookSubtitle()).ifPresent(newBook::setBookSubtitle);
+        Optional.ofNullable(dto.bookAuthor()).ifPresent(newBook::setBookAuthor);
+        Optional.ofNullable(dto.bookPublisher()).ifPresent(newBook::setBookPublisher);
+        Optional.ofNullable(dto.bookYear()).ifPresent(newBook::setBookYear);
+        Optional.ofNullable(dto.bookEdition()).ifPresent(newBook::setBookEdition);
+        Optional.ofNullable(dto.bookLanguage()).ifPresent(newBook::setBookLanguage);
+        Optional.ofNullable(dto.bookPageNumber()).ifPresent(newBook::setBookPageNumber);
+        Optional.ofNullable(dto.bookCategories()).ifPresent(newBook::setBookCategories);
+        Optional.ofNullable(dto.bookSynopsis()).ifPresent(newBook::setBookSynopsis);
+        Optional.ofNullable(dto.bookBannerURL()).ifPresent(newBook::setBookBannerURL);
+        Optional.ofNullable(dto.bookQuantityInStock()).ifPresent(newBook::setBookQuantityInStock);
+        Optional.ofNullable(dto.bookStatus()).ifPresent(newBook::setBookStatus);
+        Optional.ofNullable(dto.bookKeywords()).ifPresent(newBook::setBookKeywords);
+        Optional.ofNullable(dto.bookPopularity()).ifPresent(newBook::setBookPopularity);
+        Optional.ofNullable(dto.bookReviews()).ifPresent(newBook::setBookReviews);
+
+        newBook.setUpdatedAt(LocalDateTime.now());
+        bookRepository.save(newBook);
+        return newBook;
+    }
+
+
 }
