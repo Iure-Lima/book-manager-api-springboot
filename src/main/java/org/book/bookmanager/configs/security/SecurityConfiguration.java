@@ -30,6 +30,9 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
+                    authorize.requestMatchers(HttpMethod.POST, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.GET, "/book/**").permitAll();
                     authorize.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
