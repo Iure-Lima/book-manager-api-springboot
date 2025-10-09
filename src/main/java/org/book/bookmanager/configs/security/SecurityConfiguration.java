@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.DELETE, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.GET, "/book/**").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/borrowed").hasRole("USER");
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/{email}").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

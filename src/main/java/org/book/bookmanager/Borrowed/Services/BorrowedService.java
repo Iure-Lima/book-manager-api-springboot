@@ -10,6 +10,8 @@ import org.book.bookmanager.Borrowed.Model.BorrowedModel;
 import org.book.bookmanager.Borrowed.Repositories.BorrowedRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -56,5 +58,9 @@ public class BorrowedService {
         this.borrowedRepository.save(newBorrowed);
         return newBorrowed;
 
+    }
+
+    public Page<BorrowedModel> getByUserLogin(String userLogin, Pageable pageable){
+        return this.borrowedRepository.findAllByUserLogin(userLogin, pageable);
     }
 }

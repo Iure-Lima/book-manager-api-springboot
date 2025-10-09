@@ -9,6 +9,10 @@ import org.book.bookmanager.Borrowed.Model.BorrowedModel;
 import org.book.bookmanager.Borrowed.Services.BorrowedService;
 import org.book.bookmanager.User.Services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +48,11 @@ public class BorrowedController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(borrowed);
+    }
+
+    @Operation(summary = "Take all borrow from a user", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @GetMapping("/{email}")
+    public ResponseEntity<Page<BorrowedModel>> getByUserLogin(@PathVariable(value = "email") String email, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+        return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByUserLogin(email, page));
     }
 }
