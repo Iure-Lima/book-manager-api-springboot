@@ -5,9 +5,10 @@ import lombok.Getter;
 @Getter
 public enum BorrowedStatus {
     WAITING("waiting"),
-    APPROVED("approved"),
+    OPEN("open"),
     FAILED("failed"),
-    FINALIZED("finalized");
+    OVERDUE("overdue"),
+    RETURNED("returned");
 
     private final String status;
 
