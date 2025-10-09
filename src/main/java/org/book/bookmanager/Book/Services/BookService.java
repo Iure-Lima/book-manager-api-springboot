@@ -108,5 +108,9 @@ public class BookService {
         return newBook;
     }
 
+    public void updateBook(BookModel newBook){
+        newBook.setUpdatedAt(LocalDateTime.now());
+        this.bookRepository.save(newBook);
+    }
 
 }

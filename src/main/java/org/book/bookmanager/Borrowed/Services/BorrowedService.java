@@ -1,5 +1,6 @@
 package org.book.bookmanager.Borrowed.Services;
 
+import org.book.bookmanager.Book.DTOs.BookDTORequestUpdated;
 import org.book.bookmanager.Book.Enum.BookStatus;
 import org.book.bookmanager.Book.Model.BookModel;
 import org.book.bookmanager.Book.Services.BookService;
@@ -39,6 +40,8 @@ public class BorrowedService {
         newBorrowed.setCreatedAt(LocalDateTime.now());
         newBorrowed.setDueAt(LocalDateTime.now().plusDays(30));
 
+        book.setBookQuantityInStock(book.getBookQuantityInStock() - 1);
+        this.bookService.updateBook(book);
         this.borrowedRepository.save(newBorrowed);
         return newBorrowed;
 
