@@ -13,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class BorrowedService {
@@ -26,7 +30,14 @@ public class BorrowedService {
 
     public BorrowedModel saveBorrowedModel(BorrowedRequest borrowedRequest, String email){
         BookModel book = this.bookService.getBookById(borrowedRequest.bookId());
-        if (book == null) return null;
+        List<BorrowedModel> existBorrowedForBook =
+                borrowedRepository.findAllByBookIdAndUserLogin(borrowedRequest.bookId(), email)
+                        .stream()
+                        .filter(b -> EnumSet.of(BorrowedStatus.WAITING, BorrowedStatus.OPEN, BorrowedStatus.OVERDUE)
+                                .contains(b.getBorrowedStatus()))
+                        .toList();
+
+        if (!existBorrowedForBook.isEmpty() || book == null) return null;
 
         if (book.getBookStatus() == BookStatus.UNAVAILABLE || book.getBookQuantityInStock() <= 0) return null;
 
