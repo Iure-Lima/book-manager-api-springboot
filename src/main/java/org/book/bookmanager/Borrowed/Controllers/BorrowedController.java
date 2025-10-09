@@ -50,9 +50,23 @@ public class BorrowedController {
         return ResponseEntity.status(HttpStatus.OK).body(borrowed);
     }
 
-    @Operation(summary = "Take all borrow from a user", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
-    @GetMapping("/{email}")
+    @Operation(summary = "Take all borrow from a user email", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @GetMapping("/email/{email}")
     public ResponseEntity<Page<BorrowedModel>> getByUserLogin(@PathVariable(value = "email") String email, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+        return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByUserLogin(email, page));
+    }
+
+    @Operation(summary = "Take all borrow from a me", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @GetMapping("/me")
+    public ResponseEntity<Page<BorrowedModel>> getByMe(@PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page, @RequestHeader(value = "Authorization", required = true) String authorization){
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String token = authorization.substring(7);
+        String email = tokenService.getUserNameOfToken(token);
+        if ("Token Invalid or Expired".equals(email)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByUserLogin(email, page));
     }
 }
