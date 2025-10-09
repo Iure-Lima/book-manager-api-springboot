@@ -24,7 +24,7 @@ public class BorrowedService {
     @Autowired
     BookService bookService;
 
-    private BorrowedModel saveBorrowedModel(BorrowedRequest borrowedRequest, String email){
+    public BorrowedModel saveBorrowedModel(BorrowedRequest borrowedRequest, String email){
         BookModel book = this.bookService.getBookById(borrowedRequest.bookId());
         if (book == null) return null;
 
