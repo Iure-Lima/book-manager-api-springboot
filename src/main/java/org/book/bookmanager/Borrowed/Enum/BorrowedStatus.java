@@ -8,6 +8,7 @@ public enum BorrowedStatus {
     OPEN("open"),
     FAILED("failed"),
     OVERDUE("overdue"),
+    CANCELLED("cancelled"),
     RETURNED("returned");
 
     private final String status;
