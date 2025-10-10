@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface WishListRepository extends MongoRepository<WishListModel, String> {
     WishListModel findByWishlistId(String wishlistId);
     Page<WishListModel> findAllByUserLogin(String userLogin, Pageable pageable);
+
+    WishListModel findByWishlistName(String wishlistName);
 }
