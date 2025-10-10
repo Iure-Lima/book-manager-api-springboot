@@ -78,4 +78,8 @@ public class BorrowedService {
     public  Page<BorrowedModel> getByStateAndEmail(BorrowedStatus status, String email, Pageable page){
         return this.borrowedRepository.findAllByBorrowedStatusAndUserLogin(status, email, page);
     }
+
+    public Page<BorrowedModel> getByDueAt(LocalDate dueAt, Pageable page){
+        return this.borrowedRepository.findAllByDueAt(dueAt,page);
+    }
 }

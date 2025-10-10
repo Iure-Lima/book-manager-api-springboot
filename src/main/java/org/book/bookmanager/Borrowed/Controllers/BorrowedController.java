@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/borrowed")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -101,5 +103,11 @@ public class BorrowedController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByState(state, page));
+    }
+
+    @Operation(summary = "Get all borrow with dueAt", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @GetMapping("/due/{date}")
+    public ResponseEntity<Page<BorrowedModel>> getByStateAndEmail(@PathVariable(value = "date") LocalDate date, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+        return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByDueAt(date, page));
     }
 }
