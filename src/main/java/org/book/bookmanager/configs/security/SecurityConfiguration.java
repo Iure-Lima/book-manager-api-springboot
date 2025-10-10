@@ -33,6 +33,7 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.POST, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.DELETE, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.GET, "/book/**").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/book/books").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/borrowed").hasRole("USER");
                     authorize.requestMatchers(HttpMethod.GET, "/borrowed/me").hasAnyRole("ADMIN", "USER");
                     authorize.requestMatchers(HttpMethod.GET, "/borrowed/email/{email}").hasAnyRole("ADMIN", "LIBRARIAN");
