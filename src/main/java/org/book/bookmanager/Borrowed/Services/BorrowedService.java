@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
@@ -46,10 +47,10 @@ public class BorrowedService {
         BeanUtils.copyProperties(borrowedRequest, newBorrowed);
         newBorrowed.setBorrowedStatus(BorrowedStatus.WAITING);
         newBorrowed.setUserLogin(email);
-        newBorrowed.setCheckoutAt(LocalDateTime.now());
+        newBorrowed.setCheckoutAt(LocalDate.now());
         newBorrowed.setUpdatedAt(LocalDateTime.now());
         newBorrowed.setCreatedAt(LocalDateTime.now());
-        newBorrowed.setDueAt(LocalDateTime.now().plusDays(30));
+        newBorrowed.setDueAt(LocalDate.now().plusDays(30));
 
         book.setBookQuantityInStock(book.getBookQuantityInStock() - 1);
         this.bookService.updateBook(book);
