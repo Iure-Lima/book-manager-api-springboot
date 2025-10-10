@@ -5,6 +5,7 @@ import org.book.bookmanager.Book.DTOs.BookDTORequestUpdated;
 import org.book.bookmanager.Book.Enum.BookStatus;
 import org.book.bookmanager.Book.Model.BookModel;
 import org.book.bookmanager.Book.Repositories.BookRepository;
+import org.book.bookmanager.User.Services.TokenService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,7 @@ public class BookService {
         newBook.setUpdatedAt(LocalDateTime.now());
         newBook.setBookReviews(0.0);
         newBook.setBookPopularity(0.0);
+        System.out.printf(String.valueOf(LocalDateTime.now()));
 
         bookRepository.save(newBook);
         return newBook;
@@ -99,11 +101,16 @@ public class BookService {
         Optional.ofNullable(dto.bookKeywords()).ifPresent(newBook::setBookKeywords);
         Optional.ofNullable(dto.bookPopularity()).ifPresent(newBook::setBookPopularity);
         Optional.ofNullable(dto.bookReviews()).ifPresent(newBook::setBookReviews);
-
         newBook.setUpdatedAt(LocalDateTime.now());
+
+        if (newBook.getBookQuantityInStock() == 0) newBook.setBookStatus(BookStatus.UNAVAILABLE);
         bookRepository.save(newBook);
         return newBook;
     }
 
+    public void updateBook(BookModel newBook){
+        newBook.setUpdatedAt(LocalDateTime.now());
+        this.bookRepository.save(newBook);
+    }
 
 }

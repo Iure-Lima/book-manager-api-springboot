@@ -33,6 +33,18 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.POST, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.DELETE, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.GET, "/book/**").permitAll();
+                    authorize.requestMatchers(HttpMethod.POST, "/borrowed").hasRole("USER");
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/me").hasAnyRole("ADMIN", "USER");
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/email/{email}").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/book/{id}").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/all").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/state/{state}").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/me/state/{state}").hasRole("USER");
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/due/{date}").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/checkout/{date}").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.PATCH, "/borrowed/{id}").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/borrowed/{id}").hasRole("ADMIN");
+
                     authorize.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
