@@ -82,4 +82,8 @@ public class BorrowedService {
     public Page<BorrowedModel> getByDueAt(LocalDate dueAt, Pageable page){
         return this.borrowedRepository.findAllByDueAt(dueAt,page);
     }
+
+    public Page<BorrowedModel> getByCheckoutAt(LocalDate checkoutAt, Pageable page){
+        return this.borrowedRepository.findAllByCheckoutAt(checkoutAt,page);
+    }
 }

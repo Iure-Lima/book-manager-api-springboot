@@ -102,12 +102,18 @@ public class BorrowedController {
         if ("Token Invalid or Expired".equals(email)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByState(state, page));
+        return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByStateAndEmail(state, email, page));
     }
 
-    @Operation(summary = "Get all borrow with dueAt", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @Operation(summary = "Get all borrow with due date", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
     @GetMapping("/due/{date}")
-    public ResponseEntity<Page<BorrowedModel>> getByStateAndEmail(@PathVariable(value = "date") LocalDate date, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+    public ResponseEntity<Page<BorrowedModel>> getByDueDate(@PathVariable(value = "date") LocalDate date, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
         return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByDueAt(date, page));
+    }
+
+    @Operation(summary = "Get all borrow with checkout date", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @GetMapping("/checkout/{date}")
+    public ResponseEntity<Page<BorrowedModel>> getByCheckoutDate(@PathVariable(value = "date") LocalDate date, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+        return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByCheckoutAt(date, page));
     }
 }
