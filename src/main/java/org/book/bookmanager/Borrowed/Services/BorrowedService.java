@@ -61,4 +61,8 @@ public class BorrowedService {
     public Page<BorrowedModel> getByUserLogin(String userLogin, Pageable pageable){
         return this.borrowedRepository.findAllByUserLogin(userLogin, pageable);
     }
+
+    public Page<BorrowedModel> getByBookId(String id, Pageable page){
+        return this.borrowedRepository.findAllByBookId(id, page);
+    }
 }

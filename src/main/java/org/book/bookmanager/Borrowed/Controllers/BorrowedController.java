@@ -69,4 +69,10 @@ public class BorrowedController {
         }
         return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByUserLogin(email, page));
     }
+
+    @Operation(summary = "Take all borrow from a user email", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @GetMapping("/book/{id}")
+    public ResponseEntity<Page<BorrowedModel>> getByBookId(@PathVariable(value = "id") String id, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+        return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByBookId(id, page));
+    }
 }
