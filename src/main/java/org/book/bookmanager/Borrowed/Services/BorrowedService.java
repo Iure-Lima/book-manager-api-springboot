@@ -86,4 +86,16 @@ public class BorrowedService {
     public Page<BorrowedModel> getByCheckoutAt(LocalDate checkoutAt, Pageable page){
         return this.borrowedRepository.findAllByCheckoutAt(checkoutAt,page);
     }
+
+    public Object delete(String borrowedId){
+        BorrowedModel borrowed = this.borrowedRepository.findByBorrowedId(borrowedId);
+
+        if (borrowed == null) return null;
+        if ((borrowed.getBorrowedStatus() == BorrowedStatus.RETURNED) || (borrowed.getBorrowedStatus() == BorrowedStatus.CANCELLED) || (borrowed.getBorrowedStatus() == BorrowedStatus.FAILED)) {
+            this.borrowedRepository.delete(borrowed);
+            return true;
+        };
+
+        return false;
+    }
 }

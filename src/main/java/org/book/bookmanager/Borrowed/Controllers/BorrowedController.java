@@ -116,4 +116,20 @@ public class BorrowedController {
     public ResponseEntity<Page<BorrowedModel>> getByCheckoutDate(@PathVariable(value = "date") LocalDate date, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
         return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByCheckoutAt(date, page));
     }
+
+    @Operation(summary = "Delete borrowed by id", method = "DELETE", security = {@SecurityRequirement(name="bearerAuth")} )
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable(value = "id") String id, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+        Object deleted = this.borrowedService.delete(id);
+
+        if (deleted == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This Borrowed dont exist");
+        }
+
+        if (!(boolean) deleted) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This Borrowed cannot be deleted");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("This Borrowed is deleted");
+    }
 }

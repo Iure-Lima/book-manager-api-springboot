@@ -42,6 +42,8 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.GET, "/borrowed/me/state/{state}").hasRole("USER");
                     authorize.requestMatchers(HttpMethod.GET, "/borrowed/due/{date}").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.GET, "/borrowed/checkout/{date}").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.PATCH, "/borrowed").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/borrowed/{id}").hasRole("ADMIN");
 
                     authorize.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
