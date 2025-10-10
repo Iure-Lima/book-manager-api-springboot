@@ -50,13 +50,13 @@ public class BorrowedController {
         return ResponseEntity.status(HttpStatus.OK).body(borrowed);
     }
 
-    @Operation(summary = "Take all borrow from a user email", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @Operation(summary = "Get all borrow from a user email", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
     @GetMapping("/email/{email}")
     public ResponseEntity<Page<BorrowedModel>> getByUserLogin(@PathVariable(value = "email") String email, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
         return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByUserLogin(email, page));
     }
 
-    @Operation(summary = "Take all borrow from a me", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @Operation(summary = "Get all borrow from a me", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
     @GetMapping("/me")
     public ResponseEntity<Page<BorrowedModel>> getByMe(@PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page, @RequestHeader(value = "Authorization", required = true) String authorization){
         if (authorization == null || !authorization.startsWith("Bearer ")) {
@@ -70,9 +70,15 @@ public class BorrowedController {
         return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByUserLogin(email, page));
     }
 
-    @Operation(summary = "Take all borrow from a user email", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @Operation(summary = "Get all borrow from a book id", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
     @GetMapping("/book/{id}")
     public ResponseEntity<Page<BorrowedModel>> getByBookId(@PathVariable(value = "id") String id, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
         return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByBookId(id, page));
+    }
+
+    @Operation(summary = "Get all borrow", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @GetMapping("/all")
+    public ResponseEntity<Page<BorrowedModel>> getByBookId(@PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+        return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getAll(page));
     }
 }

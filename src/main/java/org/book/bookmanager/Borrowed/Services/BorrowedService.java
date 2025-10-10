@@ -65,4 +65,8 @@ public class BorrowedService {
     public Page<BorrowedModel> getByBookId(String id, Pageable page){
         return this.borrowedRepository.findAllByBookId(id, page);
     }
+
+    public  Page<BorrowedModel> getAll(Pageable page){
+        return  this.borrowedRepository.findAll(page);
+    }
 }
