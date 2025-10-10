@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.book.bookmanager.Borrowed.DTOs.BorrowedRequest;
+import org.book.bookmanager.Borrowed.DTOs.BorrowedUpdateStatusRequest;
 import org.book.bookmanager.Borrowed.Enum.BorrowedStatus;
 import org.book.bookmanager.Borrowed.Model.BorrowedModel;
 import org.book.bookmanager.Borrowed.Services.BorrowedService;
@@ -131,5 +132,17 @@ public class BorrowedController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("This Borrowed is deleted");
+    }
+
+    @Operation(summary = "Update borrowed state", method = "PATCH", security = {@SecurityRequirement(name="bearerAuth")} )
+    @PatchMapping("/{id}")
+    public ResponseEntity<Object> updateState(@PathVariable(value = "id") String id, @RequestBody BorrowedUpdateStatusRequest borrowedUpdateStatusRequest, @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+        BorrowedModel updatedState = this.borrowedService.updateState(borrowedUpdateStatusRequest, id);
+
+        if (updatedState == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This Borrowed dont exist");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(updatedState);
     }
 }

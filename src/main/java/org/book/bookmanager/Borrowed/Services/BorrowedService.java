@@ -5,6 +5,7 @@ import org.book.bookmanager.Book.Enum.BookStatus;
 import org.book.bookmanager.Book.Model.BookModel;
 import org.book.bookmanager.Book.Services.BookService;
 import org.book.bookmanager.Borrowed.DTOs.BorrowedRequest;
+import org.book.bookmanager.Borrowed.DTOs.BorrowedUpdateStatusRequest;
 import org.book.bookmanager.Borrowed.Enum.BorrowedStatus;
 import org.book.bookmanager.Borrowed.Model.BorrowedModel;
 import org.book.bookmanager.Borrowed.Repositories.BorrowedRepository;
@@ -97,5 +98,22 @@ public class BorrowedService {
         };
 
         return false;
+    }
+
+    public BorrowedModel updateState(BorrowedUpdateStatusRequest borrowedUpdateStatusRequest, String id){
+        BorrowedModel borrowed = this.borrowedRepository.findByBorrowedId(id);
+        if (borrowed == null) return null;
+        if (borrowed.getBorrowedStatus().equals(borrowedUpdateStatusRequest.borrowedStatus())) return borrowed;
+
+        borrowed.setBorrowedStatus(borrowedUpdateStatusRequest.borrowedStatus());
+        borrowed.setUpdatedAt(LocalDateTime.now());
+
+        if (borrowedUpdateStatusRequest.borrowedStatus().equals(BorrowedStatus.FAILED) || borrowedUpdateStatusRequest.borrowedStatus().equals(BorrowedStatus.CANCELLED) || borrowedUpdateStatusRequest.borrowedStatus().equals(BorrowedStatus.RETURNED)){
+            BookModel book = this.bookService.getBookById(borrowed.getBookId());
+            if (borrowedUpdateStatusRequest.borrowedStatus().equals(BorrowedStatus.RETURNED)) book.setBookPopularity(book.getBookPopularity() + 1);
+            book.setBookQuantityInStock(book.getBookQuantityInStock() + 1);
+            this.bookService.updateBook(book);
+        }
+        return this.borrowedRepository.save(borrowed);
     }
 }
