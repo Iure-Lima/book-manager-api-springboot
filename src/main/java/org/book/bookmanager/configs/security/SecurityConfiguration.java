@@ -34,11 +34,12 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.DELETE, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.GET, "/book/**").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/borrowed").hasRole("USER");
-                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/me").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/me").hasAnyRole("ADMIN", "USER");
                     authorize.requestMatchers(HttpMethod.GET, "/borrowed/email/{email}").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.GET, "/borrowed/book/{id}").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.GET, "/borrowed/all").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.GET, "/borrowed/state/{state}").hasAnyRole("ADMIN", "LIBRARIAN");
+                    authorize.requestMatchers(HttpMethod.GET, "/borrowed/me/state/{state}").hasRole("USER");
 
                     authorize.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

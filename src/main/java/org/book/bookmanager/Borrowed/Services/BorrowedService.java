@@ -74,4 +74,8 @@ public class BorrowedService {
     public Page<BorrowedModel> getByState(BorrowedStatus state, Pageable page){
         return this.borrowedRepository.findAllByBorrowedStatus(state, page);
     }
+
+    public  Page<BorrowedModel> getByStateAndEmail(BorrowedStatus status, String email, Pageable page){
+        return this.borrowedRepository.findAllByBorrowedStatusAndUserLogin(status, email, page);
+    }
 }

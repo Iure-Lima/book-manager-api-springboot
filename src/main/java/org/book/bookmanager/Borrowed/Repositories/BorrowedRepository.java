@@ -19,4 +19,5 @@ public interface BorrowedRepository extends MongoRepository<BorrowedModel, Strin
     Page<BorrowedModel> findAllByBookId(String bookId, Pageable pageable);
     Page<BorrowedModel> findAllByDueAt(LocalDate dueAt, Pageable pageable);
     Page<BorrowedModel> findAllByBorrowedStatus(BorrowedStatus borrowedStatus, Pageable pageable);
+    Page<BorrowedModel> findAllByBorrowedStatusAndUserLogin(BorrowedStatus borrowedStatus, String userLogin, Pageable page);
 }

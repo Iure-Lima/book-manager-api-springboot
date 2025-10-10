@@ -88,4 +88,18 @@ public class BorrowedController {
     public ResponseEntity<Page<BorrowedModel>> getByState(@PathVariable(value = "state") BorrowedStatus state,  @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
         return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByState(state, page));
     }
+
+    @Operation(summary = "Get all borrow with Borrowed state and email", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @GetMapping("/me/state/{state}")
+    public ResponseEntity<Page<BorrowedModel>> getByStateAndEmail(@PathVariable(value = "state") BorrowedStatus state,  @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page, @RequestHeader(value = "Authorization", required = true) String authorization){
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String token = authorization.substring(7);
+        String email = tokenService.getUserNameOfToken(token);
+        if ("Token Invalid or Expired".equals(email)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByState(state, page));
+    }
 }
