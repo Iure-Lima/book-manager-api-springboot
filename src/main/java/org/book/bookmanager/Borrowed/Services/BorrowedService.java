@@ -70,4 +70,8 @@ public class BorrowedService {
     public  Page<BorrowedModel> getAll(Pageable page){
         return  this.borrowedRepository.findAll(page);
     }
+
+    public Page<BorrowedModel> getByState(BorrowedStatus state, Pageable page){
+        return this.borrowedRepository.findAllByBorrowedStatus(state, page);
+    }
 }

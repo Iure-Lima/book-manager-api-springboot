@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.book.bookmanager.Borrowed.DTOs.BorrowedRequest;
+import org.book.bookmanager.Borrowed.Enum.BorrowedStatus;
 import org.book.bookmanager.Borrowed.Model.BorrowedModel;
 import org.book.bookmanager.Borrowed.Services.BorrowedService;
 import org.book.bookmanager.User.Services.TokenService;
@@ -78,7 +79,13 @@ public class BorrowedController {
 
     @Operation(summary = "Get all borrow", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
     @GetMapping("/all")
-    public ResponseEntity<Page<BorrowedModel>> getByBookId(@PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+    public ResponseEntity<Page<BorrowedModel>> getAll(@PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
         return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getAll(page));
+    }
+
+    @Operation(summary = "Get all borrow with Borrowed state", method = "GET", security = {@SecurityRequirement(name="bearerAuth")} )
+    @GetMapping("/state/{state}")
+    public ResponseEntity<Page<BorrowedModel>> getByState(@PathVariable(value = "state") BorrowedStatus state,  @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.ASC) Pageable page){
+        return  ResponseEntity.status(HttpStatus.OK).body(this.borrowedService.getByState(state, page));
     }
 }
