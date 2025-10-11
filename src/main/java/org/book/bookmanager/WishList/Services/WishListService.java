@@ -4,6 +4,7 @@ import org.book.bookmanager.Book.Model.BookModel;
 import org.book.bookmanager.Book.Services.BookService;
 import org.book.bookmanager.WishList.DTOs.WishListAddBookRequestDTO;
 import org.book.bookmanager.WishList.DTOs.WishListRequestDTO;
+import org.book.bookmanager.WishList.DTOs.WishListUpdateRequestDTO;
 import org.book.bookmanager.WishList.Model.WishListModel;
 import org.book.bookmanager.WishList.Repositories.WishListRepository;
 import org.springframework.beans.BeanUtils;
@@ -128,5 +129,21 @@ public class WishListService {
         if (wishLists.getContent().isEmpty()) return  ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         return  ResponseEntity.ok(wishLists);
+    }
+
+    public ResponseEntity<WishListModel> updateWishListName(String id, WishListUpdateRequestDTO dto, String email){
+        WishListModel wishList = this.wishListRepository.findByWishlistId(id);
+
+        if (wishList == null) return  ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        if (!wishList.getUserLogin().equals(email)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        if (this.wishListRepository.findByWishlistName(dto.wishlistName()) != null) return ResponseEntity.status(HttpStatus.CONFLICT).build();
+
+        wishList.setWishlistName(dto.wishlistName());
+        wishList.setUpdateAt(LocalDateTime.now());
+        this.wishListRepository.save(wishList);
+
+        return  ResponseEntity.ok(wishList);
     }
 }

@@ -50,6 +50,7 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.POST, "/wishlist/addBook/{id}").hasRole("USER");
                     authorize.requestMatchers(HttpMethod.DELETE, "/wishlist/removeBook/{id}").hasRole("USER");
                     authorize.requestMatchers(HttpMethod.GET, "/wishlist").hasRole("USER");
+                    authorize.requestMatchers(HttpMethod.PUT, "/wishlist/{id}").hasRole("USER");
                     authorize.requestMatchers(HttpMethod.GET, "/wishlist/wishName").hasRole("USER");
                     authorize.requestMatchers(HttpMethod.GET, "/wishlist/{id}").hasRole("USER");
                     authorize.anyRequest().authenticated();

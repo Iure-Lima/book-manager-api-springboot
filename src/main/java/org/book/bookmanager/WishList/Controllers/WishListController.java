@@ -8,6 +8,7 @@ import org.book.bookmanager.Book.Services.BookService;
 import org.book.bookmanager.User.Services.TokenService;
 import org.book.bookmanager.WishList.DTOs.WishListAddBookRequestDTO;
 import org.book.bookmanager.WishList.DTOs.WishListRequestDTO;
+import org.book.bookmanager.WishList.DTOs.WishListUpdateRequestDTO;
 import org.book.bookmanager.WishList.Model.WishListModel;
 import org.book.bookmanager.WishList.Services.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class WishListController {
     @Autowired
     TokenService tokenService;
 
-    @Operation(summary = "Requesto to create wishlist", method = "POST", security = {@SecurityRequirement(name="bearerAuth")})
+    @Operation(summary = "Request to create wishlist", method = "POST", security = {@SecurityRequirement(name="bearerAuth")})
     @PostMapping
     public ResponseEntity<WishListModel> createWishList(@RequestBody @Valid WishListRequestDTO wishListRequestDTO, @RequestHeader(value = "Authorization", required = true) String authorization){
         if (authorization == null || !authorization.startsWith("Bearer ")) {
@@ -137,5 +138,20 @@ public class WishListController {
         }
 
         return this.wishListService.getAllWishList(email, page);
+    }
+
+    @Operation(summary = "Update wish list", method = "PUT", security = {@SecurityRequirement(name="bearerAuth")})
+    @PutMapping("/{id}")
+    public ResponseEntity<WishListModel> updateWishList(@RequestBody @Valid WishListUpdateRequestDTO dto, @PathVariable(value = "id") String id, @RequestHeader(value = "Authorization", required = true) String authorization){
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String token = authorization.substring(7);
+        String email = tokenService.getUserNameOfToken(token);
+        if ("Token Invalid or Expired".equals(email)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        return this.wishListService.updateWishListName(id,dto, email);
     }
 }
