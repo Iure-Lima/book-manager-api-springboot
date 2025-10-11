@@ -84,4 +84,18 @@ public class WishListService {
 
         return ResponseEntity.ok(wishList);
     }
+
+    public ResponseEntity<WishListModel> removeBook(String id, WishListAddBookRequestDTO bookIdDTO, String email){
+        String bookId = bookIdDTO.bookId();
+        WishListModel wishList = this.wishListRepository.findByWishlistId(id);
+
+        if (wishList == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        if (!wishList.getUserLogin().equals(email)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        List<String> books = wishList.getBooksId();
+        books.remove(bookId);
+
+        return ResponseEntity.ok(wishList);
+    }
 }

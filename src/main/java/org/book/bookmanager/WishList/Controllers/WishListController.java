@@ -74,4 +74,18 @@ public class WishListController {
         }
         return  this.wishListService.addBook(id, bookId, email);
     }
+
+    @Operation(summary = "Remove book in the wish list", method = "DELETE", security = {@SecurityRequirement(name="bearerAuth")})
+    @DeleteMapping("/removeBook/{id}")
+    public ResponseEntity<WishListModel> removeBookInWishList(@PathVariable(name = "id") String id, @RequestBody @Valid WishListAddBookRequestDTO bookId, @RequestHeader(value = "Authorization", required = true) String authorization){
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String token = authorization.substring(7);
+        String email = tokenService.getUserNameOfToken(token);
+        if ("Token Invalid or Expired".equals(email)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        return  this.wishListService.removeBook(id, bookId, email);
+    }
 }
