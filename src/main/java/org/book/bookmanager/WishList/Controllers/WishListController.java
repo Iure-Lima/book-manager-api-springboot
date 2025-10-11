@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.book.bookmanager.Book.Services.BookService;
 import org.book.bookmanager.User.Services.TokenService;
+import org.book.bookmanager.WishList.DTOs.WishListAddBookRequestDTO;
 import org.book.bookmanager.WishList.DTOs.WishListRequestDTO;
 import org.book.bookmanager.WishList.Model.WishListModel;
 import org.book.bookmanager.WishList.Services.WishListService;
@@ -26,9 +27,6 @@ public class WishListController {
     @Autowired
     TokenService tokenService;
 
-    @Autowired
-    BookService bookService;
-
     @Operation(summary = "Requesto to create wishlist", method = "POST", security = {@SecurityRequirement(name="bearerAuth")})
     @PostMapping
     public ResponseEntity<WishListModel> createWishList(@RequestBody @Valid WishListRequestDTO wishListRequestDTO, @RequestHeader(value = "Authorization", required = true) String authorization){
@@ -42,5 +40,38 @@ public class WishListController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(this.wishListService.createWishList(wishListRequestDTO, email));
+    }
+
+    @Operation(summary = "Delete wish list by id", method = "DELETE", security = {@SecurityRequirement(name="bearerAuth")})
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteWishList(@PathVariable(name = "id") String id, @RequestHeader(value = "Authorization", required = true) String authorization){
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String token = authorization.substring(7);
+        String email = tokenService.getUserNameOfToken(token);
+        if ("Token Invalid or Expired".equals(email)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        boolean deletedWishList = this.wishListService.deleteWishList(id, email);
+
+        if (!deletedWishList) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Wish List not found");
+
+        return ResponseEntity.status(HttpStatus.OK).body("Wish list deleted");
+    }
+
+    @Operation(summary = "Add book in the wish list", method = "POST", security = {@SecurityRequirement(name="bearerAuth")})
+    @PostMapping("/addBook/{id}")
+    public ResponseEntity<WishListModel> addBookInWishList(@PathVariable(name = "id") String id, @RequestBody @Valid WishListAddBookRequestDTO bookId, @RequestHeader(value = "Authorization", required = true) String authorization){
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String token = authorization.substring(7);
+        String email = tokenService.getUserNameOfToken(token);
+        if ("Token Invalid or Expired".equals(email)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        return  this.wishListService.addBook(id, bookId, email);
     }
 }

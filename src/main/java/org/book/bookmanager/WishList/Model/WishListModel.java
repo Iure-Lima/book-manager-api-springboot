@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "wishlist")
 @Getter
@@ -28,7 +30,7 @@ public class WishListModel {
     private String userLogin;
 
     @Field(name="books")
-    private String[] booksId;
+    private List<String> booksId = new ArrayList<>();
 
     @Field(name="createAt")
     private LocalDateTime createAt;
