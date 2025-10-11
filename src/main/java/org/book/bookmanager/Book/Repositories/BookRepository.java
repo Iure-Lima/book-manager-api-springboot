@@ -30,4 +30,6 @@ public interface BookRepository extends MongoRepository<BookModel, String> {
     Page<BookModel> findByBookStatus(BookStatus bookStatus, Pageable pageable);
     Page<BookModel> findByBookPublisher(String bookPublisher, Pageable pageable);
 
+    Page<BookModel> findByBookIdIn(Collection<String> bookIds, Pageable pageable);
+
 }
