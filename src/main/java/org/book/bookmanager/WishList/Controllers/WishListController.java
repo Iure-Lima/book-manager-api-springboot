@@ -11,6 +11,10 @@ import org.book.bookmanager.WishList.DTOs.WishListRequestDTO;
 import org.book.bookmanager.WishList.Model.WishListModel;
 import org.book.bookmanager.WishList.Services.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -90,8 +94,8 @@ public class WishListController {
     }
 
     @Operation(summary = "Get wish list by name", method = "GET", security = {@SecurityRequirement(name="bearerAuth")})
-    @GetMapping()
-    public ResponseEntity<WishListModel> getWishListByName(@RequestParam(required = false) String name, @RequestHeader(value = "Authorization", required = true) String authorization){
+    @GetMapping("/wishName")
+    public ResponseEntity<WishListModel> getWishListByName(@RequestParam(required = true) String name, @RequestHeader(value = "Authorization", required = true) String authorization){
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
@@ -101,7 +105,6 @@ public class WishListController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        if (name == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         return this.wishListService.getWishListByName(name, email);
     }
@@ -119,5 +122,20 @@ public class WishListController {
         }
 
         return this.wishListService.getWishListById(id, email);
+    }
+
+    @Operation(summary = "Get all wish list", method = "GET", security = {@SecurityRequirement(name="bearerAuth")})
+    @GetMapping()
+    public ResponseEntity<Page<WishListModel>> getAllWishList(@PageableDefault(size = 10, page = 0, sort = "name", direction = Sort.Direction.ASC)Pageable page, @RequestHeader(value = "Authorization", required = true) String authorization){
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String token = authorization.substring(7);
+        String email = tokenService.getUserNameOfToken(token);
+        if ("Token Invalid or Expired".equals(email)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        return this.wishListService.getAllWishList(email, page);
     }
 }

@@ -9,6 +9,7 @@ import org.book.bookmanager.WishList.Repositories.WishListRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -119,5 +120,13 @@ public class WishListService {
         if (!wishList.getUserLogin().equals(email)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         return  ResponseEntity.ok(wishList);
+    }
+
+    public ResponseEntity<Page<WishListModel>> getAllWishList(String email, Pageable page){
+        Page<WishListModel> wishLists = this.wishListRepository.findAllByUserLogin(email , page);
+
+        if (wishLists.getContent().isEmpty()) return  ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        return  ResponseEntity.ok(wishLists);
     }
 }
