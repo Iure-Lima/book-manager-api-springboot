@@ -12,6 +12,7 @@ import org.book.bookmanager.Book.Enum.BookStatus;
 import org.book.bookmanager.Book.Model.BookModel;
 import org.book.bookmanager.Book.Services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -50,6 +52,12 @@ public class BookController {
         BookModel book = this.bookService.getBookById(id);
         if (book == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
         return ResponseEntity.status(HttpStatus.OK).body(book);
+    }
+
+    @Operation(summary = "Get all books by id", method = "GET")
+    @GetMapping("/books")
+    public ResponseEntity<Object> getAllBooksByIds(@RequestParam(value = "ids", required = true) Collection<String> ids, @PageableDefault(size = 10, page = 0, sort = "BOOK_TITLE", direction = Sort.Direction.ASC) Pageable page){
+        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.getAllByBooksIds(ids, page));
     }
 
     @Operation(summary = "Partially update book information's", method = "PATCH")

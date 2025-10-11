@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -111,6 +112,10 @@ public class BookService {
     public void updateBook(BookModel newBook){
         newBook.setUpdatedAt(LocalDateTime.now());
         this.bookRepository.save(newBook);
+    }
+
+    public Page<BookModel> getAllByBooksIds(Collection<String> booksIs, Pageable page){
+        return this.bookRepository.findByBookIdIn(booksIs, page);
     }
 
 }
