@@ -49,6 +49,8 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.DELETE, "/wishlist").hasRole("USER");
                     authorize.requestMatchers(HttpMethod.POST, "/wishlist/addBook/{id}").hasRole("USER");
                     authorize.requestMatchers(HttpMethod.DELETE, "/wishlist/removeBook/{id}").hasRole("USER");
+                    authorize.requestMatchers(HttpMethod.GET, "/wishlist").hasRole("USER");
+                    authorize.requestMatchers(HttpMethod.GET, "/wishlist/{id}").hasRole("USER");
                     authorize.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

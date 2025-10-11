@@ -8,6 +8,7 @@ import org.book.bookmanager.WishList.Model.WishListModel;
 import org.book.bookmanager.WishList.Repositories.WishListRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,10 @@ public class WishListService {
     @Autowired
     BookService bookService;
 
-    public WishListModel createWishList(WishListRequestDTO wishList, String email){
+    public ResponseEntity<WishListModel> createWishList(WishListRequestDTO wishList, String email){
         WishListModel existWishList = this.wishListRepository.findByWishlistName(wishList.wishlistName());
 
-        if (existWishList != null) return existWishList;
+        if (existWishList != null) return ResponseEntity.status(HttpStatus.CONFLICT).body(existWishList);
 
         WishListModel newWishList = new WishListModel();
         newWishList.setWishlistId(UUID.randomUUID().toString());
@@ -40,7 +41,7 @@ public class WishListService {
         newWishList.setUserLogin(email);
 
         this.wishListRepository.save(newWishList);
-        return newWishList;
+        return ResponseEntity.ok(newWishList);
     }
 
     public boolean deleteWishList(String id, String email){
@@ -95,7 +96,28 @@ public class WishListService {
 
         List<String> books = wishList.getBooksId();
         books.remove(bookId);
+        wishList.setUpdateAt(LocalDateTime.now());
 
         return ResponseEntity.ok(wishList);
+    }
+
+    public ResponseEntity<WishListModel> getWishListByName(String name, String email){
+        WishListModel wishList = this.wishListRepository.findByWishlistName(name);
+
+        if (wishList == null) return  ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        if (!wishList.getUserLogin().equals(email)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        return  ResponseEntity.ok(wishList);
+    }
+
+    public ResponseEntity<WishListModel> getWishListById(String id, String email){
+        WishListModel wishList = this.wishListRepository.findByWishlistId(id);
+
+        if (wishList == null) return  ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        if (!wishList.getUserLogin().equals(email)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        return  ResponseEntity.ok(wishList);
     }
 }

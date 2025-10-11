@@ -39,7 +39,7 @@ public class WishListController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(this.wishListService.createWishList(wishListRequestDTO, email));
+        return this.wishListService.createWishList(wishListRequestDTO, email);
     }
 
     @Operation(summary = "Delete wish list by id", method = "DELETE", security = {@SecurityRequirement(name="bearerAuth")})
@@ -87,5 +87,37 @@ public class WishListController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         return  this.wishListService.removeBook(id, bookId, email);
+    }
+
+    @Operation(summary = "Get wish list by name", method = "GET", security = {@SecurityRequirement(name="bearerAuth")})
+    @GetMapping()
+    public ResponseEntity<WishListModel> getWishListByName(@RequestParam(required = false) String name, @RequestHeader(value = "Authorization", required = true) String authorization){
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String token = authorization.substring(7);
+        String email = tokenService.getUserNameOfToken(token);
+        if ("Token Invalid or Expired".equals(email)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        if (name == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        return this.wishListService.getWishListByName(name, email);
+    }
+
+    @Operation(summary = "Get wish list by id", method = "GET", security = {@SecurityRequirement(name="bearerAuth")})
+    @GetMapping("/{id}")
+    public ResponseEntity<WishListModel> getWishListById(@PathVariable(value = "id") String id, @RequestHeader(value = "Authorization", required = true) String authorization){
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String token = authorization.substring(7);
+        String email = tokenService.getUserNameOfToken(token);
+        if ("Token Invalid or Expired".equals(email)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        return this.wishListService.getWishListById(id, email);
     }
 }
