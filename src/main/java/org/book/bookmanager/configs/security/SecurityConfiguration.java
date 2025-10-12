@@ -1,8 +1,11 @@
 package org.book.bookmanager.configs.security;
 
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -36,6 +39,7 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
                     authorize.requestMatchers(HttpMethod.DELETE, "/book").hasAnyRole("ADMIN", "LIBRARIAN");
@@ -60,7 +64,6 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.PUT, "/wishlist/{id}").hasRole("USER");
                     authorize.requestMatchers(HttpMethod.GET, "/wishlist/wishName").hasRole("USER");
                     authorize.requestMatchers(HttpMethod.GET, "/wishlist/{id}").hasRole("USER");
-                    authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     authorize.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -75,11 +78,13 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration c = new CorsConfiguration();
+        c.setAllowCredentials(false);
         c.setAllowedOriginPatterns(List.of("*"));
         c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
         c.setAllowedHeaders(List.of("*"));
-        c.setExposedHeaders(List.of("*"));
-        c.setAllowCredentials(true);
+        c.setExposedHeaders(List.of("Authorization", "Content-Type", "Content-Length"));
+        c.setMaxAge(3600L);
+
         UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
         s.registerCorsConfiguration("/**", c);
         return s;
