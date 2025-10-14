@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum BookStatus {
-    AVALIABLE("available"),
+    AVAILABLE("available"),
     UNAVAILABLE("unavailable");
 
     private final String status;

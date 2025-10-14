@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "Book Manager API", version = "2.2.2", description = "API developed for managing books and also book reservations"))
+@OpenAPIDefinition(info = @Info(title = "Book Manager API", version = "2.2.3", description = "API developed for managing books and also book reservations"))
 public class BookManagerApplication {
 
     public static void main(String[] args) {
