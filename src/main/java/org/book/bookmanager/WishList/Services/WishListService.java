@@ -99,6 +99,7 @@ public class WishListService {
         List<String> books = wishList.getBooksId();
         books.remove(bookId);
         wishList.setUpdateAt(LocalDateTime.now());
+        this.wishListRepository.save(wishList);
 
         return ResponseEntity.ok(wishList);
     }
