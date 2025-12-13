@@ -5,6 +5,9 @@ RUN mvn -B -DskipTests dependency:go-offline --no-transfer-progress
 COPY src ./src
 RUN mvn -B -DskipTests package --no-transfer-progress
 
+# Baixar o Agente OpenTelemetry
+ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
+
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
